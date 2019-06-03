@@ -334,7 +334,7 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +" "+ last;
 			String query;
-			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval(id), '%s', '%s');",id,  full, nationality);
+			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval(id), '%s', '%s');",  full, nationality);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
