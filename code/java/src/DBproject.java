@@ -312,7 +312,7 @@ public class DBproject{
 			System.out.print("\tEnter seats: $");			
 			String seats = in.readLine();
 			String query;
-			query = String.format("INSERT INTO Plane (id, make, model, age, seats) VALUES (%s, '%s', '%s', %s, %s);", id, make, model, age, seats);
+			query = String.format("INSERT INTO Plane (id, make, model, age, seats) VALUES ( nextval(id), '%s', '%s', %s, %s);", make, model, age, seats);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -334,7 +334,7 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +" "+ last;
 			String query;
-			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (%s, '%s', '%s');", id, full, nationality);
+			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval(id), '%s', '%s');",  full, nationality);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -377,7 +377,7 @@ public class DBproject{
 			String last = in.readLine();
 			String full = first +" "+last;
 			String query;
-			query = String.format("INSERT INTO Pilot id, fullname ) VALUES (%s, '%s');", id, full);
+			query = String.format("INSERT INTO Technician (id, fullname ) VALUES (nextval(id), '%s');",  full);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -394,9 +394,11 @@ public class DBproject{
 			String cid = in.readLine();
 			System.out.print("\tEnter the flight id: $");			
 			String fid = in.readLine();
+			System.out.print("\tEnter the status: $");			
+			String status = in.readLine();
 
 			String query;
-			query = String.format("INSERT INTO Pilot (%s, $s, %s)",count, id, full);
+			query = String.format("INSERT INTO Reservation (nextval(rnum), $s, %s, '%s')", cid, fid, status);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
