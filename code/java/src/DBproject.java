@@ -346,11 +346,11 @@ public class DBproject{
 		// Given a pilot, plane and flight, adds a flight in the DB
 		try{
 			System.out.print("\tEnter flight id: $");			
-			String plight = in.readLine();
+			String flightid = in.readLine();
 			System.out.print("\tEnter pilot id: $");			
 			String pilotid = in.readLine();
 			System.out.print("\tEnter plane id: $");			
-			String planeid = in.readLine();
+			String plane = in.readLine();
 			
 			String query;
 			query = String.format("INSERT INTO FlightInfo (id, flight_id, pilot_id, plane_id ) VALUES (nextval(fiid),$s, $s, %s);", flightid, pilotid, plane);
@@ -394,7 +394,7 @@ public class DBproject{
 			String query;
 			query = String.format("INSERT INTO Reservation (rum, cid, fid, status) VALUES (nextval(rnum), $s, %s, '%s')", cid, fid, status);
 			Statement stmt = conn.createStatement();
-			String q2 = String.format("SELECT f.num_sold FROM Flight f WHERE $s = f.")
+			String q2 = String.format("SELECT f.num_sold FROM Flight f WHERE $s = f.fid")
 			ResultSet rs= stmt.executeQuery("SELECT f.num_sold FROM Flight WHERE ");
 			while (rs.next())
 			{
