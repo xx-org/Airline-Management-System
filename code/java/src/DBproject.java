@@ -398,7 +398,7 @@ public class DBproject{
 			String status = in.readLine();
 
 			String query;
-			query = String.format("INSERT INTO Reservation (nextval(rnum), $s, %s, '%s')", cid, fid, status);
+			query = String.format("INSERT INTO Reservation (rum, cid, fid, status) VALUES (nextval(rnum), $s, %s, '%s')", cid, fid, status);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
