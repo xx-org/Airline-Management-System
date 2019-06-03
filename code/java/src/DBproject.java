@@ -319,7 +319,7 @@ public class DBproject{
 			
 			
 			
-			}catch(Exception e ){System.err.println(e.getMessage())};
+			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
 	public static void AddPilot(DBproject esql) {//2_good
@@ -334,14 +334,14 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +" "+ last;
 			String query;
-			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval(id), '%s', '%s');",  full, nationality);
+			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval(id), '%s', '%s');",id,  full, nationality);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
 			
 			
 			
-			}catch(Exception e ){System.err.println(e.getMessage())};
+			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
 	public static void AddFlight(DBproject esql) {//3
@@ -364,7 +364,7 @@ public class DBproject{
 			
 			
 			
-			}catch(Exception e ){System.err.println(e.getMessage())};
+			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
 	public static void AddTechnician(DBproject esql) {//4_good
@@ -384,7 +384,7 @@ public class DBproject{
 			
 			
 			
-			}catch(Exception e ){System.err.println(e.getMessage())};
+			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
 	public static void BookFlight(DBproject esql) {//5
@@ -405,7 +405,7 @@ public class DBproject{
 			
 			
 			
-			}catch(Exception e ){System.err.println(e.getMessage())};
+			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//6
