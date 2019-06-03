@@ -347,9 +347,7 @@ public class DBproject{
 	public static void AddFlight(DBproject esql) {//3
 		// Given a pilot, plane and flight, adds a flight in the DB
 		try{
-			System.out.print("\tEnter pilot id: $");
-			String pilotid = in.readLine();
-			System.out.print("\tEnter plane id: $");			
+			System.out.print("\tEnter flight id: $");			
 			String planeid = in.readLine();
 			System.out.print("\tEnter last name: $");			
 			String last = in.readLine();
@@ -357,7 +355,7 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +last;
 			String query;
-			query = String.format("INSERT INTO Pilot (%s, $s, %s);", id, full, nationality);
+			query = String.format("INSERT INTO Pilot (id, fullname ) VALUES (nextval(id), $s, %s);", full, nationality);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -369,8 +367,6 @@ public class DBproject{
 
 	public static void AddTechnician(DBproject esql) {//4_good
 		try{
-			System.out.print("\tEnter the Technician id: $");
-			String id = in.readLine();
 			System.out.print("\tEnter the first name: $");			
 			String first = in.readLine();
 			System.out.print("\tEnter the last name: $");			
@@ -399,8 +395,14 @@ public class DBproject{
 
 			String query;
 			query = String.format("INSERT INTO Reservation (rum, cid, fid, status) VALUES (nextval(rnum), $s, %s, '%s')", cid, fid, status);
-			
-			int rowCount = esql.executeQuery(query);
+			Statement stmt = conn.createStatement();
+			String q2 = String.format("SELECT f.num_sold FROM Flight f WHERE $s = f.")
+			ResultSet rs= stmt.executeQuery("SELECT f.num_sold FROM Flight WHERE ");
+			while (rs.next())
+			{
+				
+			}
+			rs.close();
 			System.out.println("total row(s):"+rowCount);
 			
 			
