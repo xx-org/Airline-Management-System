@@ -301,8 +301,7 @@ public class DBproject{
 
 	public static void AddPlane(DBproject esql) {//1_good
 		try{
-			System.out.print("\tEnter id: $");
-			String id = in.readLine();
+
 			System.out.print("\tEnter make: $");			
 			String make = in.readLine();
 			System.out.print("\tEnter model: $");			
@@ -324,8 +323,7 @@ public class DBproject{
 
 	public static void AddPilot(DBproject esql) {//2_good
 		try{
-			System.out.print("\tEnter id: $");
-			String id = in.readLine();
+
 			System.out.print("\tEnter first name: $");			
 			String first = in.readLine();
 			System.out.print("\tEnter last name: $");			
@@ -348,14 +346,14 @@ public class DBproject{
 		// Given a pilot, plane and flight, adds a flight in the DB
 		try{
 			System.out.print("\tEnter flight id: $");			
+			String plight = in.readLine();
+			System.out.print("\tEnter pilot id: $");			
+			String pilotid = in.readLine();
+			System.out.print("\tEnter plane id: $");			
 			String planeid = in.readLine();
-			System.out.print("\tEnter last name: $");			
-			String last = in.readLine();
-			System.out.print("\tEnter nationality: $");			
-			String nationality = in.readLine();
-			String full = first +last;
+			
 			String query;
-			query = String.format("INSERT INTO Pilot (id, fullname ) VALUES (nextval(id), $s, %s);", full, nationality);
+			query = String.format("INSERT INTO FlightInfo (id, flight_id, pilot_id, plane_id ) VALUES (nextval(fiid),$s, $s, %s);", flightid, pilotid, plane);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
