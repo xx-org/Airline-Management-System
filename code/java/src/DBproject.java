@@ -216,6 +216,7 @@ public class DBproject{
 	 * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
 	 */
 	public static void main (String[] args) {
+	/*
 	   JFrame frame = new JFrame("Airline DATABASE");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setSize(600,400);
@@ -232,7 +233,7 @@ public class DBproject{
        JPanel panel = new JPanel();
        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 
-       panel.setLayout(mgr);;
+       panel.setLayout(null);
        panel.add(button);
        panel.add(button2);
        panel.add(button3);
@@ -244,7 +245,7 @@ public class DBproject{
        frame.add(panel);
 
        frame.setVisible(true);
-       //GUI
+       *///GUI
        
 		if (args.length != 3) {
 			System.err.println (
@@ -431,22 +432,19 @@ public class DBproject{
 			char status;
 			String query;
 			
-			
-			if(result.get(0).get(0) != null)
-			{	if(Integer.parseInt(result.get(0).get(0)) >= 0)
-				{
-					status = 'C';
-					query = String.format("Update Flight SET num_sold = num_sold +1 WHERE fnum = %s", fid);
-					int rowCount1 = esql.executeQuery(query);
-				}else{
-				 	status = 'W';
-				}
-				query = String.format("INSERT INTO Reservation  VALUES (nextval(rnum_seq), %s, %s, '%s')", cid, fid, status);
-                        	int rowCount2 = esql.executeQuery(query);
-                        	System.out.print("total row(s):");
-			}else System.out.println("flight id does not exisit");
-
-			}catch(Exception e ){System.err.println(e.getMessage());};
+			if(Integer.parseInt(result.get(0).get(0)) >= 0)
+			{
+				status = 'C';
+				query = String.format("Update Flight SET num_sold = num_sold +1 WHERE fnum = %s;INSERT INTO Reservation VALUES (nextval('rnum_seq'), %s, %s, '%s');",fid, cid, fid, status);
+				
+				esql.executeQuery(query);
+			}else{
+				status = 'W';
+				String query2 = String.format("INSERT INTO Reservation VALUES (nextval('rnum_seq'), %s, %s, '%s');", cid, fid, status);
+	                        esql.executeQuery(query2);
+        	                System.out.print("status:"+status);
+			}
+		}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//6
