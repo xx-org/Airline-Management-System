@@ -23,6 +23,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * This class defines a simple embedded SQL utility class that is designed to
@@ -34,6 +37,7 @@ public class DBproject{
 	//reference to physical database connection
 	private Connection _connection = null;
 	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	static JTextField userText = new JTextField(20);
 	
 	public DBproject(String dbname, String dbport, String user, String passwd) throws SQLException {
 		System.out.print("Connecting to database...");
@@ -212,6 +216,36 @@ public class DBproject{
 	 * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
 	 */
 	public static void main (String[] args) {
+	   JFrame frame = new JFrame("Airline DATABASE");
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.setSize(600,400);
+       JButton button = new JButton("Add Plane");
+       button.setSize(50, 50);
+       JButton button2 = new JButton("Add Pilot");
+       button2.setSize(50, 50);
+       JButton button3 = new JButton("Add Flight");
+       button3.setSize(50, 50);
+       JButton button4 = new JButton("Add Technician");
+       button4.setSize(50, 50);
+       JButton button5 = new JButton("Book Flight");
+       button5.setSize(50, 50);
+       JPanel panel = new JPanel();
+       panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+
+       panel.setLayout(mgr);;
+       panel.add(button);
+       panel.add(button2);
+       panel.add(button3);
+       panel.add(button4);
+       panel.add(button5);
+       //panel.add(userText);
+       //frame.getContentPane().add(button); // Adds Button to content pane of frame
+
+       frame.add(panel);
+
+       frame.setVisible(true);
+       //GUI
+       
 		if (args.length != 3) {
 			System.err.println (
 				"Usage: " + "java [-classpath <classpath>] " + DBproject.class.getName () +
