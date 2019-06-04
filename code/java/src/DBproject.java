@@ -391,26 +391,25 @@ public class DBproject{
 			System.out.print("\tEnter the flight id: $");			
 			String fid = in.readLine();
 
-			String q2 = String.format("SELECT f.num_sold FROM Flight f, Plane p WHERE $s = f.id AND p.id = f.id AND f.num_sold < p.seats;", fid)
+			String q2 = String.format("SELECT f.num_sold FROM Flight f, Plane p WHERE $s = f.id AND p.id = f.id AND f.num_sold < p.seats;", fid);
 			List<List<String>> result = esql.executeQueryAndReturnResult(q2);
-			if(result[0][1] != null)
-			{	if(Integer.parseInt(result[0][1]))
+			char status;
+			String query;
+			if(result.get(0).get(1) != null)
+			{	if(Integer.parseInt(result.get(0).get(1)) >= 0)
 				{
 					status = 'C';
 					query = String.format("Update Flight SET num_sold = num_sold +1 WHERE id = %s", fid);
-				int rowCount1 = esql.executeQuery(query);
-				}else status = 'W';
+					int rowCount1 = esql.executeQuery(query);
+				}else{
+				 	status = 'W';
+				}
+				query = String.format("INSERT INTO Reservation (rum, cid, fid, status) VALUES (nextval(rnum), $s, %s, '%s')", cid, fid, status);
+                        	int rowCount2 = esql.executeQuery(query);
+                        	System.out.println("total row(s):"+rowCount2);
+				System.out.println("Regester status:"+status);
 			}else System.out.println("flight id does not exisit");
-			String query;
-			query = String.format("INSERT INTO Reservation (rum, cid, fid, status) VALUES (nextval(rnum), $s, %s, '%s')", cid, fid, status);
-			int rowCount2 = esql.executeQuery(query);
-			System.out.println("total row(s):"+rowCount2);
-		
-			System.out.println("Regester status:"+status);
-		
-			
-			
-			
+
 			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
 
@@ -450,18 +449,20 @@ public class DBproject{
 		try{
 			String query = String.format("SELECT COUNT(r.rid) FROM Repairs r GROUP BY r.");
 			
-		}catch{Exception e}{System.err.println(e.getMessage());};
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//9_good
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
 			try{
-			String statusw = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W';")
-			System.out.println("Waitinglist: " + esql.executeQueryAndReturnResult(statusw)[0][1]);
-			String statusc = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C';")
-			System.out.println("Conformed: " + esql.executeQueryAndReturnResult(statusc)[0][1]);
-			String statusr = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R';")
-			System.out.println("Rejected: " + esql.executeQueryAndReturnResult(statusr)[0][1]);
+			String statusw = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W';");
+			System.out.println("Waitinglist: " + esql.executeQueryAndReturnResult(statusw).get(0).get(1));
+			String statusc = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C';");
+			System.out.println("Conformed: " + esql.executeQueryAndReturnResult(statusc).get(0).get(1));
+			String statusr = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R';");
+			System.out.println("Rejected: " + esql.executeQueryAndReturnResult(statusr).get(0).get(1));
 			
 			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
