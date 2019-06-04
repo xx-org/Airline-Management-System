@@ -219,3 +219,25 @@ COPY Schedule (
 )
 FROM 'schedule.csv'
 WITH DELIMITER ',';
+
+--------------------
+-- Tuning Indexes --
+--------------------
+
+CREATE INDEX name1 ON Customer Using BTREE (id);
+CREATE INDEX name2 ON Pilot Using BTREE (id);
+CREATE INDEX name3 ON Flight Using BTREE (fnum);
+CREATE INDEX name4 ON Plane Using BTREE (id);
+CREATE INDEX name5 ON Technician Using BTREE (id);
+
+CREATE INDEX name6 ON Reservation Using BTREE (rnum);
+CREATE INDEX name7 ON FlightInfo Using BTREE (fiid);
+CREATE INDEX name8 ON Repairs Using BTREE (rid);
+CREATE INDEX name9 ON Schedule Using BTREE (id);
+
+
+
+
+
+
+
