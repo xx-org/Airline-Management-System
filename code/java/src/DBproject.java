@@ -187,7 +187,7 @@ public class DBproject{
 	
 	public int getCurrSeqVal(String sequence) throws SQLException {
 		Statement stmt = this._connection.createStatement ();
-		
+	        
 		ResultSet rs = stmt.executeQuery (String.format("Select currval('%s')", sequence));
 		if (rs.next()) return rs.getInt(1);
 		return -1;
@@ -240,6 +240,9 @@ public class DBproject{
 			
 			esql = new DBproject (dbname, dbport, user, "");
 			
+			//String create_seq_1 = "CREATE SEQUENCE plane_id_seq  START WITH 67";
+			//int rowCount = esql.executeQuery(create_seq_1);
+
 			boolean keepon = true;
 			while(keepon){
 				System.out.println("MAIN MENU");
@@ -310,13 +313,12 @@ public class DBproject{
 			String age = in.readLine();
 			System.out.print("\tEnter seats: $");			
 			String seats = in.readLine();
+			
 			String query;
-			query = String.format("INSERT INTO Plane (id, make, model, age, seats) VALUES ( nextval(id), '%s', '%s', %s, %s);", make, model, age, seats);
+			query = String.format("INSERT INTO Plane VALUES ( nextval('plane_id_seq'), '%s', '%s', %s, %s);", make, model, age, seats);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
-			
-			
 			
 			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
@@ -383,7 +385,7 @@ public class DBproject{
 
 	public static void BookFlight(DBproject esql) {//5
 		// Given a customer and a flight that he/she wants to book, add a reservation to the DB
-		try{
+		try{/*
 			System.out.print("\tEnter the customer id: $");
 			String cid = in.readLine();
 			System.out.print("\tEnter the flight id: $");			
@@ -401,7 +403,7 @@ public class DBproject{
 				
 			}
 			rs.close();
-			System.out.println("total row(s):"+rowCount);
+			System.out.println("total row(s):"+rowCount);*/
 			
 			
 			

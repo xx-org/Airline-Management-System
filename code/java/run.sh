@@ -1,7 +1,9 @@
 #! /bin/bash
-DBNAME=$1
-PORT=$2
-USER=$3
+DBNAME=xwang296_DB
+PORT=8000
+USER=xwang296
 
 # Example: source ./run.sh flightDB 5432 user
 java -cp lib/*:bin/ DBproject $DBNAME $PORT $USER
+
+
