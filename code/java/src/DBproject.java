@@ -410,9 +410,6 @@ public class DBproject{
 				query = String.format("INSERT INTO Reservation  VALUES (nextval(rnum_seq), %s, %s, '%s')", cid, fid, status);
                         	int rowCount2 = esql.executeQuery(query);
                         	System.out.print("total row(s):");
-				System.out.print(rowCount2);
-				System.out.print("Regester status:");
-				System.out.print(status);
 			}else System.out.println("flight id does not exisit");
 
 			}catch(Exception e ){System.err.println(e.getMessage());};
@@ -461,8 +458,8 @@ public class DBproject{
 		// Count repairs per year and list them in ascending order
 		
 		try{
-			String query = String.format("SELECT COUNT(r.rid) FROM Repairs r GROUP BY r.");
-			
+			String query = String.format("SELECT  date_part('year', r.repair_date) AS \"year\", COUNT(r.rid) AS \"Repair times\" FROM Repairs r GROUP BY date_part('year', r.repair_date)");
+			esql.executeQueryAndPrintResult(query);
 		}catch(Exception e){
 			System.err.println(e.getMessage());
 		}
@@ -470,13 +467,25 @@ public class DBproject{
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//9_good
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
-			try{
-			String statusw = "SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W'";
-			System.out.print("Waitinglist: " + esql.executeQueryAndReturnResult(statusw).get(0).get(1));
-			String statusc = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C';");
-			System.out.print("Conformed: " + esql.executeQueryAndReturnResult(statusc).get(0).get(1));
-			String statusr = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R';");
-			System.out.print("Rejected: " + esql.executeQueryAndReturnResult(statusr).get(0).get(1));
+		try{
+			System.out.print("\tEnter the status (W, C, or R): ");
+			String input = in.readLine();
+			char status = input.charAt(0);
+			if(status == 'W'){
+				String statusw = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W';");
+				System.out.println("Waitinglist: ");
+				esql.executeQueryAndPrintResult(statusw);}
+			else if(status == 'C'){
+				String statusc = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C';");
+				System.out.println("Conformed: " );
+				esql.executeQueryAndPrintResult(statusc);}
+			else if(status == 'R'){
+				String statusr = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R';");
+				System.out.println("Rejected: " );
+				esql.executeQueryAndPrintResult(statusr);
+			}else{
+			System.out.println("Wrong input.");
+			}
 			
 			}catch(Exception e ){System.err.println(e.getMessage());};
 	}
