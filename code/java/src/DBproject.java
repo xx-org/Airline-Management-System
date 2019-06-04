@@ -334,7 +334,7 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +" "+ last;
 			String query;
-			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval(id), '%s', '%s');",  full, nationality);
+			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval('pilot_id_seq'), '%s', '%s');",  full, nationality);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -355,7 +355,7 @@ public class DBproject{
 			String plane = in.readLine();
 			
 			String query;
-			query = String.format("INSERT INTO FlightInfo (id, flight_id, pilot_id, plane_id ) VALUES (nextval(fiid),$s, $s, %s);", flightid, pilotid, plane);
+			query = String.format("INSERT INTO FlightInfo VALUES (nextval('fiid_seq'),%s, %s, %s);", flightid, pilotid, plane);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -373,7 +373,7 @@ public class DBproject{
 			String last = in.readLine();
 			String full = first +" "+last;
 			String query;
-			query = String.format("INSERT INTO Technician (id, fullname ) VALUES (nextval(id), '%s');",  full);
+			query = String.format("INSERT INTO Technician (id, full_name) VALUES (nextval('tech_id_seq'), '%s');",  full);
 			
 			int rowCount = esql.executeQuery(query);
 			System.out.println("total row(s):"+rowCount);
@@ -391,23 +391,28 @@ public class DBproject{
 			System.out.print("\tEnter the flight id: $");			
 			String fid = in.readLine();
 
-			String q2 = String.format("SELECT f.num_sold FROM Flight f, Plane p WHERE $s = f.id AND p.id = f.id AND f.num_sold < p.seats;", fid);
+			String q2 = String.format("SELECT f.num_sold FROM Flight f, Plane p, FlightInfo fi WHERE %s = f.fnum AND p.id = fi.plane_id AND f.fnum = fi.flight_id AND f.num_sold < p.seats;", fid);
+			esql.executeQueryAndPrintResult(q2);
 			List<List<String>> result = esql.executeQueryAndReturnResult(q2);
 			char status;
 			String query;
-			if(result.get(0).get(1) != null)
-			{	if(Integer.parseInt(result.get(0).get(1)) >= 0)
+			
+			
+			if(result.get(0).get(0) != null)
+			{	if(Integer.parseInt(result.get(0).get(0)) >= 0)
 				{
 					status = 'C';
-					query = String.format("Update Flight SET num_sold = num_sold +1 WHERE id = %s", fid);
+					query = String.format("Update Flight SET num_sold = num_sold +1 WHERE fnum = %s", fid);
 					int rowCount1 = esql.executeQuery(query);
 				}else{
 				 	status = 'W';
 				}
-				query = String.format("INSERT INTO Reservation (rum, cid, fid, status) VALUES (nextval(rnum), $s, %s, '%s')", cid, fid, status);
+				query = String.format("INSERT INTO Reservation  VALUES (nextval(rnum_seq), %s, %s, '%s')", cid, fid, status);
                         	int rowCount2 = esql.executeQuery(query);
-                        	System.out.println("total row(s):"+rowCount2);
-				System.out.println("Regester status:"+status);
+                        	System.out.print("total row(s):");
+				System.out.print(rowCount2);
+				System.out.print("Regester status:");
+				System.out.print(status);
 			}else System.out.println("flight id does not exisit");
 
 			}catch(Exception e ){System.err.println(e.getMessage());};
@@ -423,8 +428,8 @@ public class DBproject{
 			
 			String query = "SELECT (SELECT P.seats FROM Plane P WHERE P.id IN (SELECT F.plane_id FROM FlightInfo F WHERE F.flight_id = ";
 			String query1 = ")) - (SELECT F1.num_sold FROM Flight F1 WHERE fnum = ";
-			String query2 = " AND actual_departure_date = ";
-			String query3 = ") AS \"Availalbe seats\"";
+			String query2 = " AND actual_departure_date = '";
+			String query3 = "') AS \"Availalbe seats\"";
 			query += fid;
 			query += query1;
 			query += fid;
@@ -441,6 +446,15 @@ public class DBproject{
 
 	public static void ListsTotalNumberOfRepairsPerPlane(DBproject esql) {//7
 		// Count number of repairs per planes and list them in descending order
+		try{
+                        String query = "SELECT R.plane_id, COUNT(R.rid) FROM Repairs R GROUP BY R.plane_id ORDER BY Count(R.rid) DESC";
+
+                        int rowCount = esql.executeQueryAndPrintResult(query);
+                        System.out.println("total tow(s): " + rowCount);
+                }catch(Exception e){
+                        System.err.println(e.getMessage());
+                }
+
 	}
 
 	public static void ListTotalNumberOfRepairsPerYear(DBproject esql) {//8
@@ -457,12 +471,12 @@ public class DBproject{
 	public static void FindPassengersCountWithStatus(DBproject esql) {//9_good
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
 			try{
-			String statusw = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W';");
-			System.out.println("Waitinglist: " + esql.executeQueryAndReturnResult(statusw).get(0).get(1));
+			String statusw = "SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W'";
+			System.out.print("Waitinglist: " + esql.executeQueryAndReturnResult(statusw).get(0).get(1));
 			String statusc = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C';");
-			System.out.println("Conformed: " + esql.executeQueryAndReturnResult(statusc).get(0).get(1));
+			System.out.print("Conformed: " + esql.executeQueryAndReturnResult(statusc).get(0).get(1));
 			String statusr = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R';");
-			System.out.println("Rejected: " + esql.executeQueryAndReturnResult(statusr).get(0).get(1));
+			System.out.print("Rejected: " + esql.executeQueryAndReturnResult(statusr).get(0).get(1));
 			
 			}catch(Exception e ){System.err.println(e.getMessage());};
 	}

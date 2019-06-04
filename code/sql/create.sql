@@ -24,7 +24,7 @@ CREATE DOMAIN _SEATS AS int4 CHECK(VALUE > 0 AND VALUE < 500);--Plane Seats
 ------------
 ---TABLES---
 ------------
-CREATE SEQUENCE cid_seq;
+CREATE SEQUENCE cid_seq START WITH 250;
 CREATE TABLE Customer
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('cid_seq'),
@@ -37,7 +37,7 @@ CREATE TABLE Customer
 	zipcode char(10),
 	PRIMARY KEY (id)
 );
-CREATE SEQUENCE pilot_id_seq;
+CREATE SEQUENCE pilot_id_seq START WITH 250;
 CREATE TABLE Pilot
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('pilot_id_seq'),
@@ -45,7 +45,7 @@ CREATE TABLE Pilot
 	nationality CHAR(24),
 	PRIMARY KEY (id)
 );
-CREATE SEQUENCE fnum_seq;
+CREATE SEQUENCE fnum_seq START WITH 2000;
 CREATE TABLE Flight
 (
 	fnum INTEGER NOT NULL DEFAULT NEXTVAL('fnum_seq'),
@@ -68,7 +68,7 @@ CREATE TABLE Plane
 	seats _SEATS NOT NULL,
 	PRIMARY KEY (id)
 );
-CREATE SEQUENCE tech_id_seq;
+CREATE SEQUENCE tech_id_seq START WITH 250;
 CREATE TABLE Technician
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('tech_id_seq'),
@@ -79,7 +79,7 @@ CREATE TABLE Technician
 ---------------
 ---RELATIONS---
 ---------------
-CREATE SEQUENCE rnum_seq;
+CREATE SEQUENCE rnum_seq START WITH 9999;
 CREATE TABLE Reservation
 (
 	rnum INTEGER NOT NULL DEFAULT NEXTVAL('rnum_seq'),
@@ -90,7 +90,7 @@ CREATE TABLE Reservation
 	FOREIGN KEY (cid) REFERENCES Customer(id),
 	FOREIGN KEY (fid) REFERENCES Flight(fnum)
 );
-CREATE SEQUENCE fiid_seq;
+CREATE SEQUENCE fiid_seq START WITH 2000;
 CREATE TABLE FlightInfo
 (
 	fiid INTEGER NOT NULL DEFAULT NEXTVAL('fiid_seq'),
@@ -102,7 +102,7 @@ CREATE TABLE FlightInfo
 	FOREIGN KEY (pilot_id) REFERENCES Pilot(id),
 	FOREIGN KEY (plane_id) REFERENCES Plane(id)
 );
-CREATE SEQUENCE rid_seq;
+CREATE SEQUENCE rid_seq START WITH 550;
 CREATE TABLE Repairs
 (
 	rid INTEGER NOT NULL DEFAULT NEXTVAL('rid_seq'),
@@ -116,7 +116,7 @@ CREATE TABLE Repairs
 	FOREIGN KEY (plane_id) REFERENCES Plane(id),
 	FOREIGN KEY (technician_id) REFERENCES Technician(id)
 );
-CREATE SEQUENCE sched_id_seq;
+CREATE SEQUENCE sched_id_seq START WITH 2000;
 CREATE TABLE Schedule
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('sched_id_seq'),
