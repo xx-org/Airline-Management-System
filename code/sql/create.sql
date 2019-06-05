@@ -24,7 +24,7 @@ CREATE DOMAIN _SEATS AS int4 CHECK(VALUE > 0 AND VALUE < 500);--Plane Seats
 ------------
 ---TABLES---
 ------------
-CREATE SEQUENCE cid_seq START WITH 250;
+CREATE SEQUENCE cid_seq;
 CREATE TABLE Customer
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('cid_seq'),
@@ -37,7 +37,7 @@ CREATE TABLE Customer
 	zipcode char(10),
 	PRIMARY KEY (id)
 );
-CREATE SEQUENCE pilot_id_seq START WITH 250;
+CREATE SEQUENCE pilot_id_seq;
 CREATE TABLE Pilot
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('pilot_id_seq'),
@@ -45,7 +45,7 @@ CREATE TABLE Pilot
 	nationality CHAR(24),
 	PRIMARY KEY (id)
 );
-CREATE SEQUENCE fnum_seq START WITH 2000;
+CREATE SEQUENCE fnum_seq;
 CREATE TABLE Flight
 (
 	fnum INTEGER NOT NULL DEFAULT NEXTVAL('fnum_seq'),
@@ -58,7 +58,7 @@ CREATE TABLE Flight
 	departure_airport CHAR(5) NOT NULL,-- AIRPORT CODE --
 	PRIMARY KEY (fnum)
 );
-CREATE SEQUENCE plane_id_seq START WITH 67;
+CREATE SEQUENCE plane_id_seq;
 CREATE TABLE Plane
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('plane_id_seq'),
@@ -68,7 +68,7 @@ CREATE TABLE Plane
 	seats _SEATS NOT NULL,
 	PRIMARY KEY (id)
 );
-CREATE SEQUENCE tech_id_seq START WITH 250;
+CREATE SEQUENCE tech_id_seq;
 CREATE TABLE Technician
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('tech_id_seq'),
@@ -79,7 +79,7 @@ CREATE TABLE Technician
 ---------------
 ---RELATIONS---
 ---------------
-CREATE SEQUENCE rnum_seq START WITH 9999;
+CREATE SEQUENCE rnum_seq;
 CREATE TABLE Reservation
 (
 	rnum INTEGER NOT NULL DEFAULT NEXTVAL('rnum_seq'),
@@ -90,7 +90,7 @@ CREATE TABLE Reservation
 	FOREIGN KEY (cid) REFERENCES Customer(id),
 	FOREIGN KEY (fid) REFERENCES Flight(fnum)
 );
-CREATE SEQUENCE fiid_seq START WITH 2000;
+CREATE SEQUENCE fiid_seq;
 CREATE TABLE FlightInfo
 (
 	fiid INTEGER NOT NULL DEFAULT NEXTVAL('fiid_seq'),
@@ -102,7 +102,7 @@ CREATE TABLE FlightInfo
 	FOREIGN KEY (pilot_id) REFERENCES Pilot(id),
 	FOREIGN KEY (plane_id) REFERENCES Plane(id)
 );
-CREATE SEQUENCE rid_seq START WITH 550;
+CREATE SEQUENCE rid_seq;
 CREATE TABLE Repairs
 (
 	rid INTEGER NOT NULL DEFAULT NEXTVAL('rid_seq'),
@@ -116,7 +116,7 @@ CREATE TABLE Repairs
 	FOREIGN KEY (plane_id) REFERENCES Plane(id),
 	FOREIGN KEY (technician_id) REFERENCES Technician(id)
 );
-CREATE SEQUENCE sched_id_seq START WITH 2000;
+CREATE SEQUENCE sched_id_seq;
 CREATE TABLE Schedule
 (
 	id INTEGER NOT NULL DEFAULT NEXTVAL('sched_id_seq'),
@@ -234,10 +234,4 @@ CREATE INDEX name6 ON Reservation Using BTREE (rnum);
 CREATE INDEX name7 ON FlightInfo Using BTREE (fiid);
 CREATE INDEX name8 ON Repairs Using BTREE (rid);
 CREATE INDEX name9 ON Schedule Using BTREE (id);
-
-
-
-
-
-
 

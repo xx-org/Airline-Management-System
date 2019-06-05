@@ -350,12 +350,13 @@ public class DBproject{
 			String seats = in.readLine();
 			
 			String query;
-			query = String.format("INSERT INTO Plane VALUES ( nextval('plane_id_seq'), '%s', '%s', %s, %s);", make, model, age, seats);
+			query = String.format("SELECT setval('plane_id_seq', (SELECT MAX(id) FROM Plane), true); INSERT INTO Plane VALUES (nextval('plane_id_seq'), '%s', '%s', %s, '%s');", make, model, age, seats);
 			
-			int rowCount = esql.executeQuery(query);
-			System.out.println("total row(s):"+rowCount);
+			esql.executeUpdate(query);
 			
-			}catch(Exception e ){System.err.println(e.getMessage());};
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 
 	public static void AddPilot(DBproject esql) {//2_good
@@ -369,35 +370,73 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +" "+ last;
 			String query;
-			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval('pilot_id_seq'), '%s', '%s');",  full, nationality);
+			query = String.format("SELECT setval('pilot_id_seq', (SELECT MAX(id) FROM Pilot)); INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval('pilot_id_seq'), '%s', '%s');",  full, nationality);
 			
-			int rowCount = esql.executeQuery(query);
-			System.out.println("total row(s):"+rowCount);
+			esql.executeUpdate(query);
 			
-			
-			
-			}catch(Exception e ){System.err.println(e.getMessage());};
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 
 	public static void AddFlight(DBproject esql) {//3
 		// Given a pilot, plane and flight, adds a flight in the DB
 		try{
-			System.out.print("\tEnter flight id: $");			
-			String flightid = in.readLine();
+			System.out.print("\tEnter flight cost: $");
+			String cost = in.readLine();
+			System.out.print("\tEnter number of sold seats: $");
+			String num_sold = in.readLine();
+			System.out.print("\tEnter number of stops: $");
+			String num_stops = in.readLine();
+			System.out.print("\tEnter actual departure date: $");
+                        String actual_depart_date = in.readLine();
+			System.out.print("\tEnter actual arrival date: $");
+                        String actual_arrival_date = in.readLine();
+			System.out.print("\tEnter arrival airport: $");
+                        String arrival_airport = in.readLine();
+			System.out.print("\tEnter departure airport: $");
+                        String departure_airport = in.readLine();
+
 			System.out.print("\tEnter pilot id: $");			
 			String pilotid = in.readLine();
 			System.out.print("\tEnter plane id: $");			
 			String plane = in.readLine();
 			
-			String query;
-			query = String.format("INSERT INTO FlightInfo VALUES (nextval('fiid_seq'),%s, %s, %s);", flightid, pilotid, plane);
-			
-			int rowCount = esql.executeQuery(query);
-			System.out.println("total row(s):"+rowCount);
-			
-			
-			
-			}catch(Exception e ){System.err.println(e.getMessage());};
+			String query; 
+			query = "SELECT setval('fnum_seq', (SELECT MAX(fnum) FROM Flight))";
+			String flightid = esql.executeQueryAndReturnResult(query).get(0).get(0);
+			query = "SELECT setval('fiid_seq', (SELECT MAX(fiid) FROM FlightInfo))";
+			String flightinfoid = esql.executeQueryAndReturnResult(query).get(0).get(0);
+			query = "SELECT setval('sched_id_seq', (SELECT MAX(id) FROM Schedule))";
+			String schedid = esql.executeQueryAndReturnResult(query).get(0).get(0);
+
+			//query = String.format("INSERT INTO Flight VALUES (nextval('fnum_seq'),%s, %s, %s, '%s', '%s', '%s', '%s');", cost, num_sold, num_stops, actual_depart_date, actual_arrival_date, arrival_airport, departure_airport);
+                        query = "INSERT INTO Flight VALUES (nextval('fnum_seq'), ";
+			query += cost;
+			query += ", ";
+			query += num_sold;
+			query += ", ";
+			query += num_stops;
+			query += ", '";
+			query += actual_depart_date;
+			query += "', '";
+			query += actual_arrival_date;
+			query += "', ";
+			query += arrival_airport;
+			query += ", ";
+			query += departure_airport;
+			query += ")";
+			esql.executeUpdate(query);
+			/*
+			query = String.format("INSERT INTO FlightInfo VALUES (nextval('fiid_seq'),currval('fnum_seq'), %s, %s);", pilotid, plane);
+			esql.executeUpdate(query);
+
+			query = String.format("INSERT INTO Reservation VALUES (nextval('sched_id_seq'),currval('fnum_seq'), '%s', '%s');", actual_depart_date, actual_arrival_date);
+                        esql.executeUpdate(query);
+			*/
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 
 	public static void AddTechnician(DBproject esql) {//4_good
@@ -408,14 +447,13 @@ public class DBproject{
 			String last = in.readLine();
 			String full = first +" "+last;
 			String query;
-			query = String.format("INSERT INTO Technician (id, full_name) VALUES (nextval('tech_id_seq'), '%s');",  full);
+			query = String.format("SELECT setval('tech_id_seq', (SELECT MAX(id) FROM Technician)); INSERT INTO Technician (id, full_name) VALUES (nextval('tech_id_seq'), '%s');",  full);
 			
-			int rowCount = esql.executeQuery(query);
-			System.out.println("total row(s):"+rowCount);
+			esql.executeUpdate(query);
 			
-			
-			
-			}catch(Exception e ){System.err.println(e.getMessage());};
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 
 	public static void BookFlight(DBproject esql) {//5_good
@@ -444,7 +482,9 @@ public class DBproject{
 	                        esql.executeQuery(query2);
         	                System.out.print("status:"+status);
 			}
-		}catch(Exception e ){System.err.println(e.getMessage());};
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//6
@@ -519,6 +559,8 @@ public class DBproject{
 			System.out.println("Wrong input.");
 			}
 			
-			}catch(Exception e ){System.err.println(e.getMessage());};
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 }
