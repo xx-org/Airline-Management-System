@@ -350,8 +350,10 @@ public class DBproject{
 			String seats = in.readLine();
 			
 			String query;
-			query = String.format("SELECT setval('plane_id_seq', (SELECT MAX(id) FROM Plane), true); INSERT INTO Plane VALUES (nextval('plane_id_seq'), '%s', '%s', %s, '%s');", make, model, age, seats);
-			
+			query = "SELECT setval('plane_id_seq', (SELECT MAX(id) FROM Plane));";
+			String planeid = esql.executeQueryAndReturnResult(query).get(0).get(0);
+
+			query = String.format("INSERT INTO Plane VALUES (nextval('plane_id_seq'), '%s', '%s', %s, '%s');", make, model, age, seats);
 			esql.executeUpdate(query);
 			
 		}catch(Exception e){
@@ -370,8 +372,10 @@ public class DBproject{
 			String nationality = in.readLine();
 			String full = first +" "+ last;
 			String query;
-			query = String.format("SELECT setval('pilot_id_seq', (SELECT MAX(id) FROM Pilot)); INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval('pilot_id_seq'), '%s', '%s');",  full, nationality);
+			query = "SELECT setval('pilot_id_seq', (SELECT MAX(id) FROM Pilot))";
+			String pilotid = esql.executeQueryAndReturnResult(query).get(0).get(0);
 			
+			query = String.format("INSERT INTO Pilot (id, fullname, nationality ) VALUES (nextval('pilot_id_seq'), '%s', '%s');",  full, nationality);
 			esql.executeUpdate(query);
 			
 		}catch(Exception e){
@@ -432,7 +436,10 @@ public class DBproject{
 			String last = in.readLine();
 			String full = first +" "+last;
 			String query;
-			query = String.format("SELECT setval('tech_id_seq', (SELECT MAX(id) FROM Technician)); INSERT INTO Technician (id, full_name) VALUES (nextval('tech_id_seq'), '%s');",  full);
+			query = "SELECT setval('tech_id_seq', (SELECT MAX(id) FROM Technician));";
+                        String techid = esql.executeQueryAndReturnResult(query).get(0).get(0);
+
+			query = String.format("INSERT INTO Technician (id, full_name) VALUES (nextval('tech_id_seq'), '%s');",  full);
 			
 			esql.executeUpdate(query);
 			
