@@ -350,7 +350,7 @@ public class DBproject{
 			String seats = in.readLine();
 			
 			String query;
-			query = "SELECT setval('plane_id_seq', (SELECT MAX(id) FROM Plane));";
+			query = "SELECT setval('plane_id_seq', (SELECT MAX(id) FROM Plane))";
 			String planeid = esql.executeQueryAndReturnResult(query).get(0).get(0);
 
 			query = String.format("INSERT INTO Plane VALUES (nextval('plane_id_seq'), '%s', '%s', %s, '%s');", make, model, age, seats);
@@ -436,7 +436,7 @@ public class DBproject{
 			String last = in.readLine();
 			String full = first +" "+last;
 			String query;
-			query = "SELECT setval('tech_id_seq', (SELECT MAX(id) FROM Technician));";
+			query = "SELECT setval('tech_id_seq', (SELECT MAX(id) FROM Technician))";
                         String techid = esql.executeQueryAndReturnResult(query).get(0).get(0);
 
 			query = String.format("INSERT INTO Technician (id, full_name) VALUES (nextval('tech_id_seq'), '%s');",  full);
@@ -457,21 +457,23 @@ public class DBproject{
 			String fid = in.readLine();
 
 			String q2 = String.format("SELECT f.num_sold FROM Flight f, Plane p, FlightInfo fi WHERE %s = f.fnum AND p.id = fi.plane_id AND f.fnum = fi.flight_id AND f.num_sold < p.seats;", fid);
-			esql.executeQueryAndPrintResult(q2);
+			
 			List<List<String>> result = esql.executeQueryAndReturnResult(q2);
 			char status;
 			String query;
+			query = "SELECT setval('rnum_seq', (SELECT MAX(rnum) FROM Reservation))";
+			String rnumid = esql.executeQueryAndReturnResult(query).get(0).get(0);
 			
 			if(Integer.parseInt(result.get(0).get(0)) >= 0)
 			{
 				status = 'C';
 				query = String.format("Update Flight SET num_sold = num_sold +1 WHERE fnum = %s;INSERT INTO Reservation VALUES (nextval('rnum_seq'), %s, %s, '%s');",fid, cid, fid, status);
 				
-				esql.executeQuery(query);
+				esql.executeUpdate(query);
 			}else{
 				status = 'W';
 				String query2 = String.format("INSERT INTO Reservation VALUES (nextval('rnum_seq'), %s, %s, '%s');", cid, fid, status);
-	                        esql.executeQuery(query2);
+	                        esql.executeUpdate(query2);
         	                System.out.print("status:"+status);
 			}
 		}catch(Exception e){
