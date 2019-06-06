@@ -474,7 +474,6 @@ public class DBproject{
 				status = 'W';
 				String query2 = String.format("INSERT INTO Reservation VALUES (nextval('rnum_seq'), %s, %s, '%s');", cid, fid, status);
 	                        esql.executeUpdate(query2);
-        	                System.out.print("status:"+status);
 			}
 		}catch(Exception e){
 			System.err.println(e.getMessage());
@@ -533,20 +532,26 @@ public class DBproject{
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//9_good
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
-		try{
-			System.out.print("\tEnter the status (W, C, or R): ");
+		try{	
+			System.out.print("\tEnter the flight number: $");
+			String flightnum = in.readLine();
+			System.out.print("\tEnter the status (W, C, or R): $");
 			String input = in.readLine();
+				
 			char status = input.charAt(0);
 			if(status == 'W'){
-				String statusw = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W';");
+				String statusw = "SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'W' AND r.fid = ";
+				statusw += flightnum;
 				System.out.println("Waitinglist: ");
 				esql.executeQueryAndPrintResult(statusw);}
 			else if(status == 'C'){
-				String statusc = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C';");
+				String statusc = "SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'C' AND r.fid = ";
+				statusc += flightnum;
 				System.out.println("Conformed: " );
 				esql.executeQueryAndPrintResult(statusc);}
 			else if(status == 'R'){
-				String statusr = String.format("SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R';");
+				String statusr = "SELECT COUNT(r.rnum) FROM Reservation r WHERE r.status = 'R' AND r.fid = ";
+				statusr += flightnum;
 				System.out.println("Rejected: " );
 				esql.executeQueryAndPrintResult(statusr);
 			}else{
