@@ -410,30 +410,15 @@ public class DBproject{
 			query = "SELECT setval('sched_id_seq', (SELECT MAX(id) FROM Schedule))";
 			String schedid = esql.executeQueryAndReturnResult(query).get(0).get(0);
 
-			//query = String.format("INSERT INTO Flight VALUES (nextval('fnum_seq'),%s, %s, %s, '%s', '%s', '%s', '%s');", cost, num_sold, num_stops, actual_depart_date, actual_arrival_date, arrival_airport, departure_airport);
-                        query = "INSERT INTO Flight VALUES (nextval('fnum_seq'), ";
-			query += cost;
-			query += ", ";
-			query += num_sold;
-			query += ", ";
-			query += num_stops;
-			query += ", '";
-			query += actual_depart_date;
-			query += "', '";
-			query += actual_arrival_date;
-			query += "', ";
-			query += arrival_airport;
-			query += ", ";
-			query += departure_airport;
-			query += ")";
+			query = String.format("INSERT INTO Flight VALUES (nextval('fnum_seq'),%s, %s, %s, '%s', '%s', '%s', '%s');", cost, num_sold, num_stops, actual_depart_date, actual_arrival_date, arrival_airport, departure_airport);
 			esql.executeUpdate(query);
-			/*
+			
 			query = String.format("INSERT INTO FlightInfo VALUES (nextval('fiid_seq'),currval('fnum_seq'), %s, %s);", pilotid, plane);
 			esql.executeUpdate(query);
 
-			query = String.format("INSERT INTO Reservation VALUES (nextval('sched_id_seq'),currval('fnum_seq'), '%s', '%s');", actual_depart_date, actual_arrival_date);
-                        esql.executeUpdate(query);
-			*/
+			query = String.format("INSERT INTO Schedule VALUES (nextval('sched_id_seq'),currval('fnum_seq'), '%s', '%s');", actual_depart_date, actual_arrival_date);
+			esql.executeUpdate(query);
+			
 		}catch(Exception e){
 			System.err.println(e.getMessage());
 		}
